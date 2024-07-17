@@ -3,16 +3,15 @@ import { Eraser, Bold, Italic, Underline } from "lucide-react";
 import parse from "html-react-parser";
 import "./email-editor.scss";
 import { applyStyle } from "./apply-style";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { emailService } from "../../services/email.services";
+
+import { useEditor } from "./useEditor";
 
 export function EmailEditor() {
-  const [text, setText] = useState(
-    "Dolorum in earum repudiandae, voluptates sed hic, fugiat repellat ipsum numquam consectetur temporibus voluptatibus alias iure debitis omnis aliquid praesentium."
-  );
+  const [text, setText] = useState('');
   const [cursorStart, setCursorStart] = useState(0)
   const [cursorEnd, setCursorEnd] = useState(0)
-  // const [selectedText, setSelectedText] = useState('')
-
-
   
   const textRef = useRef(null)  //  teksto redagavimo lauko objektas
 
@@ -33,12 +32,19 @@ export function EmailEditor() {
     setCursorStart(cursorEnd);
   }
 
-  function send() {
-    console.log(textRef.current);
-  }
+  const queryClient = useQueryClient();
+  
+  const {mutate, isPending} = useMutation({
+    mutationKey: ['create email'],
+    mutationFn: () => emailService.sendEmail(text),
 
+    onSuccess(){
+      setText(''),
+      queryClient.refetchQueries({queryKey: ['email list']})
+    }
+  });
+ 
   return (
-    // <HotKeys keyMap={keyMap} handlers={handlers}>
       <div>
         <h1>Email Editor</h1>
         <div className="email-editor">
@@ -50,11 +56,13 @@ export function EmailEditor() {
               ref={textRef}
               spellCheck="false"
               value={text}
+              placeholder="Enter text there ..."
               onChange={(e) => setText(e.target.value)}
               // onClick={updateSelection}
               onSelect={updateSelection}
             />
           </div>
+
           <div className="actions">
             <div className="tools">
               <button className="btn" onClick={() => setText('')}>
@@ -70,7 +78,8 @@ export function EmailEditor() {
                 <Underline size={18} />
               </button>
             </div>
-            <button onClick={send}>Send</button>
+
+            <button disabled={isPending} onClick={mutate}>Send</button>
           </div>
         </div>
       </div>

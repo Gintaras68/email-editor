@@ -1,0 +1,24 @@
+{
+  "emails": [
+    {
+      "id": "1",
+      "text": "a title"
+    },
+    {
+      "id": "b243",
+      "text": "Dolorum in earum repudiandae, voluptates sed hic, fugiat repellat ipsum numquam consectetur temporibus voluptatibus alias iure debitis omnis aliquid praesentium."
+    },
+    {
+      "id": "ae61",
+      "text": "Trečias <u>laiškas</u>."
+    },
+    {
+      "id": "2cd1",
+      "text": "<b>Ketvirtas laiškas</b>\n"
+    },
+    {
+      "id": "06a0",
+      "text": "Dar <b>vienas</b> laiškas <i>pasitiktrinimui</i>"
+    }
+  ]
+}
